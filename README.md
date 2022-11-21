@@ -16,7 +16,7 @@ java -jar ./build/libs/musala-test-app-0.0.1-SNAPSHOT.jar
 ## Needs to be implemented
 1. Drones api to receive notification about finishing of delivering.
 2. Improve logs.
-3. cancelling actions: prepare for deliver and send to deliver
-4. Unit tests and integrational tests with testContainers.
-5. Blocks in the db fot data consistency
-6. Rollback drone commands if request to db finished with error
+3. Cancelling of actions
+4. Unit tests and international tests with testContainers.
+5. Locks in the db for data consistency
+6. Improve consistency between real drone state and drone state in the db 
