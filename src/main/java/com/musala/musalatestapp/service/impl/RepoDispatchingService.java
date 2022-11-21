@@ -5,6 +5,7 @@ import com.musala.musalatestapp.domain.drone.Drone;
 import com.musala.musalatestapp.domain.drone.DroneAction;
 import com.musala.musalatestapp.domain.drone.State;
 import com.musala.musalatestapp.domain.exceptions.InvalidStateException;
+import com.musala.musalatestapp.domain.general.DeliverRequest;
 import com.musala.musalatestapp.domain.medication.Medication;
 import com.musala.musalatestapp.domain.repository.DroneRepository;
 import com.musala.musalatestapp.domain.repository.MedicationRepository;
@@ -36,8 +37,8 @@ public class RepoDispatchingService implements DroneDispatchingService {
 
         List<Medication> medications = medicationRepository.getByIds(medicationListId);
         drone.setItems(new ArrayList<>(medications));
+        drone.setState(State.LOADING);
         droneRepository.save(drone);
-        droneClient.loadDrone(drone, medications);
     }
 
     @Override
@@ -53,19 +54,18 @@ public class RepoDispatchingService implements DroneDispatchingService {
 
         drone.setState(State.LOADED);
         droneRepository.save(drone);
-        droneClient.prepareToDeliver(drone);
     }
 
     @Override
-    public void sendToDeliver(String droneId) {
+    public void startDelivering(String droneId) {
         Drone drone = droneRepository.getDrone(droneId);
 
-        if (DroneAction.SEND_TO_DELIVER.isAvailableOnState(drone.getState())) {
+        if (!DroneAction.SEND_TO_DELIVER.isAvailableOnState(drone.getState())) {
             throw new InvalidStateException("Drone could not be sent to deliver in state " + drone.getState());
         }
 
         drone.setState(State.DELIVERING);
+        droneClient.sendDroneToDeliver(DeliverRequest.of(droneId, drone.getItems()));
         droneRepository.save(drone);
-        droneClient.deliver(drone);
     }
 }
