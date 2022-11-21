@@ -1,17 +1,10 @@
 package com.musala.musalatestapp.domain.client;
 
 import com.musala.musalatestapp.domain.drone.Drone;
-import com.musala.musalatestapp.domain.medication.Medication;
-
-import java.util.List;
+import com.musala.musalatestapp.domain.general.DeliverRequest;
 
 public interface DroneClient {
 
-    void loadDrone(Drone drone, List<Medication> medications);
-
-    void prepareToDeliver(Drone drone);
-
-    void deliver(Drone drone);
-
+    void sendDroneToDeliver(DeliverRequest request);
     Integer checkDroneBattery(Drone drone);
 }

@@ -8,5 +8,5 @@ public interface DroneDispatchingService {
 
     void prepareToDeliver(String droneId);
 
-    void sendToDeliver(String droneId);
+    void startDelivering(String droneId);
 }

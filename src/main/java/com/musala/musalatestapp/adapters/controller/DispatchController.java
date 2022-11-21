@@ -39,7 +39,7 @@ public class DispatchController {
     @PutMapping("/deliver")
     public ResponseEntity<Page<DroneResource>> sendToDeliver(@RequestParam String droneId) {
         log.debug("sendToDeliver[dronId: {}]", droneId);
-        service.sendToDeliver(droneId);
+        service.startDelivering(droneId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

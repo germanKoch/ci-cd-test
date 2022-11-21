@@ -1,7 +1,9 @@
 package com.musala.musalatestapp.service.impl;
 
+import com.musala.musalatestapp.domain.client.AuditClient;
 import com.musala.musalatestapp.domain.client.DroneClient;
 import com.musala.musalatestapp.domain.drone.Drone;
+import com.musala.musalatestapp.domain.general.AuditEvent;
 import com.musala.musalatestapp.domain.general.PageRequest;
 import com.musala.musalatestapp.domain.repository.DroneRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class DroneMonitoringService {
     public static final Integer CHUNK_SIZE = 10;
 
     private final DroneClient droneClient;
+    private final AuditClient auditClient;
     private final DroneRepository droneRepository;
 
     @Scheduled(fixedDelay = 60000)
@@ -34,7 +37,11 @@ public class DroneMonitoringService {
                     Integer batteryCapacity = droneClient.checkDroneBattery(drone);
                     drone.setBatteryCapacity(batteryCapacity);
                 }).toList();
+
                 droneRepository.saveAll(updatedDrones);
+                updatedDrones.forEach(drone -> auditClient.sendAuditEvent(
+                        AuditEvent.of(drone.getSerialNumber(), drone.getBatteryCapacity(), drone.getState()))
+                );
 
                 hasMore = drones.hasNext();
                 currentPage += 1;
