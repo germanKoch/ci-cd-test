@@ -1,15 +1,13 @@
 package com.german.ci.adapters.client;
 
-import com.german.ci.domain.general.AuditEvent;
 import com.german.ci.domain.client.AuditClient;
+import com.german.ci.domain.general.AuditEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Component
 @Log4j2
